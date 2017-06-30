@@ -1,0 +1,27 @@
+{
+  "name": "redux-store-methods",
+  "version": "1.0.0",
+  "description": "Redux example from an egghead tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentreno/redux-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agentreno/redux-example/issues"
+  },
+  "homepage": "https://github.com/agentreno/redux-example#readme",
+  "dependencies": {
+    "redux": "^3.7.1"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^2.29.0",
+    "webpack": "^3.0.0"
+  }
+}
