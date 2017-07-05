@@ -114,6 +114,15 @@ const FilterLink = ({
 
 class TodoApp extends Component {
     render() {
+        const {
+            todos,
+            visibilityFilter
+        } = this.props
+        const visibleTodos = getVisibleTodos(
+            todos,
+            visibilityFilter
+        )
+
         return (
             <div>
                 <input ref={node => {
@@ -130,7 +139,7 @@ class TodoApp extends Component {
                 Add Todo
                 </button>
                 <ul>
-                    {this.props.todos.map(todo =>
+                    {visibleTodos.map(todo =>
                         <li key={todo.id}
                             onClick={() => {
                                 store.dispatch({
@@ -149,6 +158,30 @@ class TodoApp extends Component {
                         </li>
                     )}
                 </ul>
+                <p>
+                    Show:
+                    {' '}
+                    <FilterLink
+                        filter='SHOW_ALL'
+                        currentFilter={visibilityFilter}
+                    >
+                        All
+                    </FilterLink>
+                    {' '}
+                    <FilterLink
+                        filter='SHOW_ACTIVE'
+                        currentFilter={visibilityFilter}
+                    >
+                        Active
+                    </FilterLink>
+                    {' '}
+                    <FilterLink
+                        filter='SHOW_COMPLETED'
+                        currentFilter={visibilityFilter}
+                    >
+                        Completed
+                    </FilterLink>
+                </p>
             </div>
         )
     }
@@ -158,7 +191,7 @@ class TodoApp extends Component {
 const render = () => {
     ReactDOM.render(
         <TodoApp
-            todos={store.getState().todos}
+            {...store.getState()}
         />,
         document.getElementById('root')
     )
