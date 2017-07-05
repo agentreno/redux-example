@@ -89,6 +89,45 @@ const store = createStore(todoApp)
 // React components
 let nextTodoId = 0
 
+// Single Todo component
+// Takes the click handler as a prop to make this a pure presentational
+// component
+const Todo = ({
+    onClick,
+    completed,
+    text
+}) => (
+    <li
+        onClick={onClick}
+        style={{
+            textDecoration:
+                completed ?
+                'line-through' :
+                'none'
+        }}
+    >
+        {text}
+    </li>
+)
+
+// TodoList component
+// Takes the click handler as a prop to make this a pure presentational
+// component
+const TodoList = ({
+    todos,
+    onTodoClick
+}) => (
+    <ul>
+        {todos.map(todo =>
+            <Todo
+                key={todo.id}
+                {...todo}
+                onClick={() => onTodoClick(todo.id)}
+            />
+        )}
+    </ul>
+)
+
 const FilterLink = ({
     filter,
     currentFilter,
@@ -136,28 +175,17 @@ class TodoApp extends Component {
                     })
                     this.input.value = ''
                 }}>
-                Add Todo
+                    Add Todo
                 </button>
-                <ul>
-                    {visibleTodos.map(todo =>
-                        <li key={todo.id}
-                            onClick={() => {
-                                store.dispatch({
-                                    type: 'TOGGLE_TODO',
-                                    id: todo.id
-                                })
-                            }}
-                            style={{
-                                textDecoration:
-                                    todo.completed ?
-                                    'line-through' :
-                                    'none'
-                            }}
-                        >
-                            {todo.text}
-                        </li>
-                    )}
-                </ul>
+                <TodoList
+                    todos={visibleTodos}
+                    onTodoClick={id =>
+                        store.dispatch({
+                            type: 'TOGGLE_TODO',
+                            id
+                        })
+                    }
+                />
                 <p>
                     Show:
                     {' '}
