@@ -62,6 +62,27 @@ const todoApp = combineReducers({
     visibilityFilter
 })
 
+// Helper to find visible todos given a filter
+const getVisibleTodos = (
+    todos,
+    filter
+) => {
+    switch (filter) {
+        case 'SHOW_ALL':
+            return todos
+        case 'SHOW_COMPLETED':
+            return todos.filter(
+                t => t.completed
+            )
+        case 'SHOW_ACTIVE':
+            return todos.filter(
+                t => !t.completed
+            )
+        default:
+            return todos
+    }
+}
+
 // Store
 const store = createStore(todoApp)
 
