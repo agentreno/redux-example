@@ -1,4 +1,2 @@
-import render from './App'
+import './App'
 import './index.css'
-
-render()

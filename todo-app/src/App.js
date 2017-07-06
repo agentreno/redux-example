@@ -56,12 +56,6 @@ const visibilityFilter = (
     }
 }
 
-// Root reducer
-const todoApp = combineReducers({
-    todos,
-    visibilityFilter
-})
-
 // Helper to find visible todos given a filter
 const getVisibleTodos = (
     todos,
@@ -82,9 +76,6 @@ const getVisibleTodos = (
             return todos
     }
 }
-
-// Store
-const store = createStore(todoApp)
 
 // React components
 let nextTodoId = 0
@@ -129,7 +120,8 @@ const TodoList = ({
 )
 
 class VisibleTodoList extends Component {
-    componentWillMount() {
+    componentDidMount() {
+        const { store } = this.props
         this.unsubscribe = store.subscribe(() =>
             this.forceUpdate()
         )
@@ -140,6 +132,8 @@ class VisibleTodoList extends Component {
     }
 
     render() {
+        const props = this.props
+        const { store } = props
         const state = store.getState()
         return (
             <TodoList
@@ -160,7 +154,9 @@ class VisibleTodoList extends Component {
     }
 }
 
-const AddTodo = () => {
+const AddTodo = ({
+    store
+}) => {
     let input;
 
     return (
@@ -206,6 +202,7 @@ const Link = ({
 // Container for Link, provides behaviour and active state
 class FilterLink extends Component {
     componentDidMount() {
+        const { store } = this.props
         this.unsubscribe = store.subscribe(() =>
             this.forceUpdate()
         )
@@ -217,6 +214,7 @@ class FilterLink extends Component {
 
     render() {
         const props = this.props
+        const { store } = props
         const state = store.getState()
 
         return (
@@ -238,46 +236,54 @@ class FilterLink extends Component {
     }
 }
 
-const Footer = () => (
+const Footer = ({
+    store
+}) => (
     <p>
         Show:
         {' '}
         <FilterLink
             filter='SHOW_ALL'
+            store={store}
         >
             All
         </FilterLink>
         {' '}
         <FilterLink
             filter='SHOW_ACTIVE'
+            store={store}
         >
             Active
         </FilterLink>
         {' '}
         <FilterLink
             filter='SHOW_COMPLETED'
+            store={store}
         >
             Completed
         </FilterLink>
     </p>
 )
 
-const TodoApp = () => (
+const TodoApp = ({
+    store
+}) => (
     <div>
-        <AddTodo />
-        <VisibleTodoList />
-        <Footer />
+        <AddTodo store={store} />
+        <VisibleTodoList store={store} />
+        <Footer store={store} />
     </div>
 )
 
+// Root reducer
+const todoApp = combineReducers({
+    todos,
+    visibilityFilter
+})
+
+
 // Renderer
-const render = () => {
-    ReactDOM.render(
-        <TodoApp />,
-        document.getElementById('root')
-    )
-}
-
-store.subscribe(render)
-
-export default render
+ReactDOM.render(
+    <TodoApp store={createStore(todoApp)} />,
+    document.getElementById('root')
+)
