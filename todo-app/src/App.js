@@ -272,10 +272,6 @@ const Footer = ({
     </p>
 )
 
-Provider.childContextTypes = {
-    store: React.PropTypes.object
-}
-
 const TodoApp = () => (
     <div>
         <AddTodo />
