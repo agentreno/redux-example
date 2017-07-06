@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
+import { Provider, connect } from 'react-redux'
 import './App.css'
 
 // Todo reducer
@@ -271,17 +272,6 @@ const Footer = ({
     </p>
 )
 
-class Provider extends Component {
-    getChildContext() {
-        return {
-            store: this.props.store
-        }
-    }
-
-    render() {
-        return this.props.children
-    }
-}
 Provider.childContextTypes = {
     store: React.PropTypes.object
 }
