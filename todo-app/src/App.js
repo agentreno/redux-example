@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
-import { Provider, connect } from 'react-redux'
+import { Provider } from 'react-redux'
+import VisibleTodoList from './VisibleTodoList'
 import './App.css'
 
 // Todo reducer
@@ -57,93 +58,8 @@ const visibilityFilter = (
     }
 }
 
-// Helper to find visible todos given a filter
-const getVisibleTodos = (
-    todos,
-    filter
-) => {
-    switch (filter) {
-        case 'SHOW_ALL':
-            return todos
-        case 'SHOW_COMPLETED':
-            return todos.filter(
-                t => t.completed
-            )
-        case 'SHOW_ACTIVE':
-            return todos.filter(
-                t => !t.completed
-            )
-        default:
-            return todos
-    }
-}
-
 // React components
 let nextTodoId = 0
-
-// Single Todo component
-// Takes the click handler as a prop to make this a pure presentational
-// component
-const Todo = ({
-    onClick,
-    completed,
-    text
-}) => (
-    <li
-        onClick={onClick}
-        style={{
-            textDecoration:
-                completed ?
-                'line-through' :
-                'none'
-        }}
-    >
-        {text}
-    </li>
-)
-
-// TodoList component
-// Takes the click handler as a prop to make this a pure presentational
-// component
-const TodoList = ({
-    todos,
-    onTodoClick
-}) => (
-    <ul>
-        {todos.map(todo =>
-            <Todo
-                key={todo.id}
-                {...todo}
-                onClick={() => onTodoClick(todo.id)}
-            />
-        )}
-    </ul>
-)
-
-const mapStateToProps = (state) => {
-    return {
-        todos: getVisibleTodos(
-            state.todos,
-            state.visibilityFilter
-        )
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onTodoClick: (id) => {
-            dispatch({
-                type: 'TOGGLE_TODO',
-                id
-            })
-        }
-    }
-}
-
-const VisibleTodoList = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TodoList)
 
 const AddTodo = (
     props,
