@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 import VisibleTodoList from './VisibleTodoList'
 import './App.css'
 
@@ -61,10 +61,7 @@ const visibilityFilter = (
 // React components
 let nextTodoId = 0
 
-const AddTodo = (
-    props,
-    { store }
-) => {
+let AddTodo = ({ dispatch }) => {
     let input;
 
     return (
@@ -73,7 +70,7 @@ const AddTodo = (
                 input = node
             }} />
             <button onClick={() => {
-                store.dispatch({
+                dispatch({
                     type: 'ADD_TODO',
                     id: nextTodoId++,
                     text: input.value
@@ -85,9 +82,14 @@ const AddTodo = (
         </div>
     )
 }
-AddTodo.contextTypes = {
-    store: React.PropTypes.object
-}
+AddTodo = connect(
+    state => {
+        return {}
+    },
+    dispatch => {
+        return { dispatch }
+    }
+)(AddTodo)
 
 const Link = ({
     active,
