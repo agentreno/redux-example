@@ -5,6 +5,22 @@ import { Provider, connect } from 'react-redux'
 import VisibleTodoList from './VisibleTodoList'
 import './App.css'
 
+// Action creators
+const addTodo = (text) => {
+    return {
+        type: 'ADD_TODO',
+        id: nextTodoId++,
+        text
+    }
+}
+
+const setVisibilityFilter = (filter) => {
+    return {
+        type: 'SET_VISIBILITY_FILTER',
+        filter
+    }
+}
+
 // Todo reducer
 const todo = (state, action) => {
     switch(action.type) {
@@ -70,11 +86,7 @@ let AddTodo = ({ dispatch }) => {
                 input = node
             }} />
             <button onClick={() => {
-                dispatch({
-                    type: 'ADD_TODO',
-                    id: nextTodoId++,
-                    text: input.value
-                })
+                dispatch(addTodo(input.value))
                 input.value = ''
             }}>
                 Add Todo
@@ -83,36 +95,6 @@ let AddTodo = ({ dispatch }) => {
     )
 }
 AddTodo = connect()(AddTodo)
-
-const mapStateToLinkProps = (
-    state,
-    ownProps
-) => {
-    return {
-        active:
-            ownProps.filter ===
-            state.visibilityFilter
-    }
-}
-
-const mapDispatchToLinkProps = (
-    dispatch,
-    ownProps
-) => {
-    return {
-        onClick: () => {
-            dispatch({
-                type: 'SET_VISIBILITY_FILTER',
-                filter: ownProps.filter
-            })
-        }
-    }
-}
-
-const FilterLink = connect(
-    mapStateToLinkProps,
-    mapDispatchToLinkProps
-)(Link)
 
 const Link = ({
     active,
@@ -134,6 +116,35 @@ const Link = ({
         </a>
     )
 }
+
+const mapStateToLinkProps = (
+    state,
+    ownProps
+) => {
+    return {
+        active:
+            ownProps.filter ===
+            state.visibilityFilter
+    }
+}
+
+const mapDispatchToLinkProps = (
+    dispatch,
+    ownProps
+) => {
+    return {
+        onClick: () => {
+            dispatch(
+                setVisibilityFilter(ownProps.filter)
+            )
+        }
+    }
+}
+
+const FilterLink = connect(
+    mapStateToLinkProps,
+    mapDispatchToLinkProps
+)(Link)
 
 const Footer = ({
     store
