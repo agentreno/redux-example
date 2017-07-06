@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 import './App.css'
@@ -148,20 +148,20 @@ const AddTodo = ({
     )
 }
 
-const FilterLink = ({
-    filter,
-    currentFilter,
+const Link = ({
+    active,
     onClick,
     children
 }) => {
-    if (filter === currentFilter) {
+    if (active) {
         return <span>{children}</span>
     }
+
     return (
         <a href="#"
            onClick={e => {
                e.preventDefault()
-               onClick(filter)
+               onClick()
            }}
         >
             {children}
@@ -169,33 +169,59 @@ const FilterLink = ({
     )
 }
 
-const Footer = ({
-    visibilityFilter,
-    onFilterClick
-}) => (
+// Container for Link, provides behaviour and active state
+class FilterLink extends Component {
+    componentDidMount() {
+        this.unsubscribe = store.subscribe(() =>
+            this.forceUpdate()
+        )
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe()
+    }
+
+    render() {
+        const props = this.props
+        const state = store.getState()
+
+        return (
+            <Link
+                active={
+                    props.filter ===
+                    state.visibilityFilter
+                }
+                onClick={() => {
+                    store.dispatch({
+                        type: 'SET_VISIBILITY_FILTER',
+                        filter: props.filter
+                    })
+                }}
+            >
+                {props.children}
+            </Link>
+        )
+    }
+}
+
+const Footer = () => (
     <p>
         Show:
         {' '}
         <FilterLink
             filter='SHOW_ALL'
-            currentFilter={visibilityFilter}
-            onClick={onFilterClick}
         >
             All
         </FilterLink>
         {' '}
         <FilterLink
             filter='SHOW_ACTIVE'
-            currentFilter={visibilityFilter}
-            onClick={onFilterClick}
         >
             Active
         </FilterLink>
         {' '}
         <FilterLink
             filter='SHOW_COMPLETED'
-            currentFilter={visibilityFilter}
-            onClick={onFilterClick}
         >
             Completed
         </FilterLink>
