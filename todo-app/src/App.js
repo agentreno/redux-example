@@ -1,9 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 import { Provider, connect } from 'react-redux'
 import VisibleTodoList from './VisibleTodoList'
 import './App.css'
+
+// Global counter
+let nextTodoId = 0
 
 // Action creators
 const addTodo = (text) => {
@@ -75,8 +78,6 @@ const visibilityFilter = (
 }
 
 // React components
-let nextTodoId = 0
-
 let AddTodo = ({ dispatch }) => {
     let input;
 
