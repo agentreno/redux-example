@@ -62,8 +62,8 @@ const visibilityFilterReducer = (
 
 // Root reducer
 const todoAppReducer = combineReducers({
-    todosReducer,
-    visibilityFilterReducer
+    todos: todosReducer,
+    visibilityFilter: visibilityFilterReducer
 })
 
 // Root container component
