@@ -1,28 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
-import { Provider, connect } from 'react-redux'
+import { Provider } from 'react-redux'
+import AddTodo from './AddTodo'
 import VisibleTodoList from './VisibleTodoList'
+import Footer from './Footer'
 import './App.css'
-
-// Global counter
-let nextTodoId = 0
-
-// Action creators
-const addTodo = (text) => {
-    return {
-        type: 'ADD_TODO',
-        id: nextTodoId++,
-        text
-    }
-}
-
-const setVisibilityFilter = (filter) => {
-    return {
-        type: 'SET_VISIBILITY_FILTER',
-        filter
-    }
-}
 
 // Todo reducer
 const todoReducer = (state, action) => {
@@ -77,102 +60,13 @@ const visibilityFilterReducer = (
     }
 }
 
-// React components
-let AddTodo = ({ dispatch }) => {
-    let input;
+// Root reducer
+const todoAppReducer = combineReducers({
+    todosReducer,
+    visibilityFilterReducer
+})
 
-    return (
-        <div>
-            <input ref={node => {
-                input = node
-            }} />
-            <button onClick={() => {
-                dispatch(addTodo(input.value))
-                input.value = ''
-            }}>
-                Add Todo
-            </button>
-        </div>
-    )
-}
-AddTodo = connect()(AddTodo)
-
-const Link = ({
-    active,
-    onClick,
-    children
-}) => {
-    if (active) {
-        return <span>{children}</span>
-    }
-
-    return (
-        <a href="#"
-           onClick={e => {
-               e.preventDefault()
-               onClick()
-           }}
-        >
-            {children}
-        </a>
-    )
-}
-
-const mapStateToLinkProps = (
-    state,
-    ownProps
-) => {
-    return {
-        active:
-            ownProps.filter ===
-            state.visibilityFilter
-    }
-}
-
-const mapDispatchToLinkProps = (
-    dispatch,
-    ownProps
-) => {
-    return {
-        onClick: () => {
-            dispatch(
-                setVisibilityFilter(ownProps.filter)
-            )
-        }
-    }
-}
-
-const FilterLink = connect(
-    mapStateToLinkProps,
-    mapDispatchToLinkProps
-)(Link)
-
-const Footer = ({
-    store
-}) => (
-    <p>
-        Show:
-        {' '}
-        <FilterLink
-            filter='SHOW_ALL'
-        >
-            All
-        </FilterLink>
-        {' '}
-        <FilterLink
-            filter='SHOW_ACTIVE'
-        >
-            Active
-        </FilterLink>
-        {' '}
-        <FilterLink
-            filter='SHOW_COMPLETED'
-        >
-            Completed
-        </FilterLink>
-    </p>
-)
-
+// Root container component
 const TodoApp = () => (
     <div>
         <AddTodo />
@@ -180,13 +74,6 @@ const TodoApp = () => (
         <Footer />
     </div>
 )
-
-// Root reducer
-const todoAppReducer = combineReducers({
-    todosReducer,
-    visibilityFilterReducer
-})
-
 
 // Renderer
 ReactDOM.render(
