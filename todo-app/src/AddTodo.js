@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 // Global counter
-let nextTodoId = 0
+let nextTodoId = 1
 
 // Action creators
 const addTodo = (text) => ({

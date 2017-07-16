@@ -17,9 +17,24 @@ const TodoApp = () => (
     </div>
 )
 
+// Persisted state
+const persistedState = {
+    todos: [{
+        id: 0,
+        text: 'Welcome back',
+        completed: false
+    }]
+}
+
+// Store
+const store = createStore(
+    todoAppReducer,
+    persistedState
+)
+
 // Renderer
 ReactDOM.render(
-    <Provider store={createStore(todoAppReducer)}>
+    <Provider store={store}>
         <TodoApp />
     </Provider>,
     document.getElementById('root')
