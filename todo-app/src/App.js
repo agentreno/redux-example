@@ -6,6 +6,7 @@ import AddTodo from './AddTodo'
 import VisibleTodoList from './VisibleTodoList'
 import Footer from './Footer'
 import todoAppReducer from './reducers'
+import { loadState, saveState } from './localStorage'
 import './App.css'
 
 // Root container component
@@ -17,20 +18,19 @@ const TodoApp = () => (
     </div>
 )
 
-// Persisted state
-const persistedState = {
-    todos: [{
-        id: 0,
-        text: 'Welcome back',
-        completed: false
-    }]
-}
 
-// Store
+
+// Store with persisted state
+const persistedState = loadState()
 const store = createStore(
     todoAppReducer,
     persistedState
 )
+store.subscribe(() => {
+    saveState({
+        todos: store.getState().todos
+    })
+})
 
 // Renderer
 ReactDOM.render(
