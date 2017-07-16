@@ -22,10 +22,10 @@ const getVisibleTodos = (
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
     todos: getVisibleTodos(
         state.todos,
-        state.visibilityFilter
+        ownProps.filter
     )
 })
 
