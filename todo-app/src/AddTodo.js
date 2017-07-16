@@ -5,13 +5,11 @@ import { connect } from 'react-redux'
 let nextTodoId = 0
 
 // Action creators
-const addTodo = (text) => {
-    return {
-        type: 'ADD_TODO',
-        id: nextTodoId++,
-        text
-    }
-}
+const addTodo = (text) => ({
+    type: 'ADD_TODO',
+    id: nextTodoId++,
+    text
+})
 
 // React components
 let AddTodo = ({ dispatch }) => {
