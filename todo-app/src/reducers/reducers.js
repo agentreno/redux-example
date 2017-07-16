@@ -40,23 +40,9 @@ const todosReducer = (state = [], action) => {
     }
 }
 
-// Visibility reducer
-const visibilityFilterReducer = (
-    state = 'SHOW_ALL',
-    action
-) => {
-    switch (action.type) {
-        case 'SET_VISIBILITY_FILTER':
-            return action.filter
-        default:
-            return state
-    }
-}
-
 // Root reducer
 const todoAppReducer = combineReducers({
-    todos: todosReducer,
-    visibilityFilter: visibilityFilterReducer
+    todos: todosReducer
 })
 
 export default todoAppReducer
