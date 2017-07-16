@@ -7,6 +7,7 @@ import VisibleTodoList from './VisibleTodoList'
 import Footer from './Footer'
 import todoAppReducer from './reducers'
 import { loadState, saveState } from './localStorage'
+import throttle from 'lodash/throttle'
 import './App.css'
 
 // Root container component
@@ -26,11 +27,11 @@ const store = createStore(
     todoAppReducer,
     persistedState
 )
-store.subscribe(() => {
+store.subscribe(throttle(() => {
     saveState({
         todos: store.getState().todos
     })
-})
+}, 1000))
 
 // Renderer
 ReactDOM.render(
