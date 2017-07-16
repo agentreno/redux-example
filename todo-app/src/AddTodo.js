@@ -1,13 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
-// Global counter
-let nextTodoId = 1
+import { v4 } from 'node-uuid'
 
 // Action creators
 const addTodo = (text) => ({
     type: 'ADD_TODO',
-    id: nextTodoId++,
+    id: v4(),
     text
 })
 
