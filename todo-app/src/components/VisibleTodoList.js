@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import TodoList from './TodoList'
 
 // Helper to find visible todos given a filter
@@ -22,11 +23,8 @@ const getVisibleTodos = (
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-    todos: getVisibleTodos(
-        state.todos,
-        ownProps.filter
-    )
+const mapStateToProps = (state, { match }) => ({
+    todos: getVisibleTodos( state.todos, match.params.filter || 'all')
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -38,9 +36,9 @@ const mapDispatchToProps = (dispatch) => ({
     }
 })
 
-const VisibleTodoList = connect(
+const VisibleTodoList = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(TodoList)
+)(TodoList))
 
 export default VisibleTodoList

@@ -4,12 +4,10 @@ import VisibleTodoList from './VisibleTodoList'
 import Footer from './Footer'
 
 // Root container component
-const TodoApp = ({ match }) => (
+const TodoApp = () => (
     <div>
         <AddTodo />
-        <VisibleTodoList
-            filter={match.params.filter || 'all'}
-        />
+        <VisibleTodoList />
         <Footer />
     </div>
 )
