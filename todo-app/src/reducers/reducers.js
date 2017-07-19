@@ -24,17 +24,24 @@ const todoReducer = (state, action) => {
 }
 
 // Todos reducer
-const todosReducer = (state = [], action) => {
+const todosReducer = (state = {}, action) => {
     switch (action.type) {
         case 'ADD_TODO':
-            return [
-                ...state,
-                todoReducer(undefined, action)
-            ]
         case 'TOGGLE_TODO':
-            return state.map(t =>
-                todoReducer(t, action)
-            )
+            return {
+                ...state,
+                [action.id]: todoReducer(state[action.id], action)
+            }
+        default:
+            return state
+    }
+}
+
+// allIds reducer
+const allIds = (state = [], action) => {
+    switch(action.type) {
+        case 'ADD_TODO':
+            return [...state, action.id]
         default:
             return state
     }
@@ -42,29 +49,35 @@ const todosReducer = (state = [], action) => {
 
 // Root reducer
 const todoAppReducer = combineReducers({
-    todos: todosReducer
+    todos: todosReducer,
+    allIds
 })
 
 export default todoAppReducer
+
+// Internal selector to get a list of todos
+const getAllTodos = (state) => 
+    state.allIds.map(id => state.todos[id])
 
 // Selector to find visible todos given a filter
 export const getVisibleTodos = (
     state,
     filter
 ) => {
+    const allTodos = getAllTodos(state)
     switch (filter) {
         case 'all':
-            return state.todos
+            return allTodos
         case 'completed':
-            return state.todos.filter(
+            return allTodos.filter(
                 t => t.completed
             )
         case 'active':
-            return state.todos.filter(
+            return allTodos.filter(
                 t => !t.completed
             )
         default:
-            return state.todos
+            return allTodos
     }
 }
 
