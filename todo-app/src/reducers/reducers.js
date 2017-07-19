@@ -49,22 +49,22 @@ export default todoAppReducer
 
 // Selector to find visible todos given a filter
 export const getVisibleTodos = (
-    todos,
+    state,
     filter
 ) => {
     switch (filter) {
         case 'all':
-            return todos
+            return state.todos
         case 'completed':
-            return todos.filter(
+            return state.todos.filter(
                 t => t.completed
             )
         case 'active':
-            return todos.filter(
+            return state.todos.filter(
                 t => !t.completed
             )
         default:
-            return todos
+            return state.todos
     }
 }
 
