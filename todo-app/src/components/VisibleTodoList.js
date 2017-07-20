@@ -1,11 +1,37 @@
+import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import TodoList from './TodoList'
 import { getVisibleTodos } from '../reducers/reducers'
+import { fetchTodos } from '../api'
 
-const mapStateToProps = (state, { match }) => ({
-    todos: getVisibleTodos( state, match.params.filter || 'all')
-})
+class VisibleTodoList extends React.Component {
+    componentDidMount() {
+        fetchTodos(this.props.filter).then(todos =>
+            console.log(this.props.filter, todos)
+        )
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.filter !== prevProps.filter) {
+            fetchTodos(this.props.filter).then(todos =>
+                console.log(this.props.filter, todos)
+            )
+        }
+    }
+
+    render() {
+        return <TodoList {...this.props} />
+    }
+}
+
+const mapStateToProps = (state, { match }) => {
+    const filter = match.params.filter || 'all'
+    return {
+        todos: getVisibleTodos(state, filter),
+        filter
+    }
+}
 
 const mapDispatchToProps = (dispatch) => ({
     onTodoClick(id) {
@@ -16,9 +42,9 @@ const mapDispatchToProps = (dispatch) => ({
     }
 })
 
-const VisibleTodoList = withRouter(connect(
+VisibleTodoList = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(TodoList))
+)(VisibleTodoList))
 
 export default VisibleTodoList
