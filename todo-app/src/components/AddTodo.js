@@ -1,13 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { v4 } from 'node-uuid'
-
-// Action creators
-const addTodo = (text) => ({
-    type: 'ADD_TODO',
-    id: v4(),
-    text
-})
+import { addTodo } from '../actions'
 
 // React components
 let AddTodo = ({ dispatch }) => {
