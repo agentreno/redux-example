@@ -1,11 +1,7 @@
 import { createStore, applyMiddleware } from 'redux'
 import { createLogger } from 'redux-logger'
+import thunk from 'redux-thunk'
 import todoAppReducer from './reducers/reducers'
-
-const thunk = (store) => (next) => (action) =>
-    typeof action === 'function' ?
-        action(store.dispatch) :
-        next(action)
 
 // Create augmented store
 const configureStore = () => {
