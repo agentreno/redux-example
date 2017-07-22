@@ -1,65 +1,17 @@
 import { combineReducers } from 'redux'
+import byId, * as fromById from './byId'
+import createList, * as fromList from './createList'
 
-// Todos reducer
-const todosReducer = (state = {}, action) => {
-    switch (action.type) {
-        case 'RECEIVE_TODOS':
-            const nextState = {...state}
-            action.response.forEach(todo => {
-                nextState[todo.id] = todo
-            })
-            return nextState
-        default:
-            return state
-    }
-}
-
-const allIds = (state = [], action) => {
-    if (action.filter !== 'all') {
-        return state
-    }
-    switch (action.type) {
-        case 'RECEIVE_TODOS':
-            return action.response.map(todo => todo.id)
-        default:
-            return state
-    }
-}
-
-const activeIds = (state = [], action) => {
-    if (action.filter !== 'active') {
-        return state
-    }
-    switch (action.type) {
-        case 'RECEIVE_TODOS':
-            return action.response.map(todo => todo.id)
-        default:
-            return state
-    }
-}
-
-const completedIds = (state = [], action) => {
-    if (action.filter !== 'completed') {
-        return state
-    }
-    switch (action.type) {
-        case 'RECEIVE_TODOS':
-            return action.response.map(todo => todo.id)
-        default:
-            return state
-    }
-}
-
-const idsByFilter = combineReducers({
-    all: allIds,
-    active: activeIds,
-    completed: completedIds
+const listByFilter = combineReducers({
+    all: createList('all'),
+    active: createList('active'),
+    completed: createList('completed')
 })
 
 // Root reducer
 const todoAppReducer = combineReducers({
-    todos: todosReducer,
-    idsByFilter
+    byId,
+    listByFilter
 })
 
 export default todoAppReducer
@@ -69,7 +21,7 @@ export const getVisibleTodos = (
     state,
     filter
 ) => {
-    const ids = state.idsByFilter[filter]
-    return ids.map(id => state.todos[id])
+    const ids = fromList.getIds(state.listByFilter[filter])
+    return ids.map(id => fromById.getTodo(state.byId, id))
 }
 
